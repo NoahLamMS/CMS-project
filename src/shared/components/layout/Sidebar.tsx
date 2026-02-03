@@ -103,7 +103,7 @@ export function Sidebar({ collapsed = false, onCollapse }: SidebarProps) {
         {!isCollapsed && (
           <div>
             <Text strong className="text-orange-600 text-lg block leading-tight">
-              MEBI FARM
+              CMS project
             </Text>
           </div>
         )}
