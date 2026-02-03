@@ -1,38 +1,20 @@
 /**
  * @file product.types.ts
- * @description Product type definitions with TypeScript interfaces
- * @author Kindy
- * @created 2025-11-16
+ * @description Product type definitions matching ecommerce-nodejs backend
  */
 
-export enum ProductStatus {
-  IN_STOCK = 'in_stock',
-  OUT_OF_STOCK = 'out_of_stock',
-}
-
-export interface ICategory {
-  id: string;
-  name: string;
-  slug: string;
-  color?: string;
-}
-
 export interface IProduct {
-  id: string;
+  _id: string;
   name: string;
-  image?: string;
-  category: ICategory;
   price: number;
-  stockQuantity: number;
-  status: ProductStatus;
+  image: string;
+  description: string;
   createdAt: string;
   updatedAt: string;
 }
 
 export interface IProductFilter {
   search?: string;
-  categoryId?: string;
-  status?: ProductStatus;
   minPrice?: number;
   maxPrice?: number;
 }
@@ -56,6 +38,20 @@ export interface IProductListParams extends IPaginationParams {
   sortOrder?: 'asc' | 'desc';
 }
 
+export interface CreateProductData {
+  name: string;
+  price: number;
+  image?: string;
+  description?: string;
+}
+
+export interface UpdateProductData {
+  name?: string;
+  price?: number;
+  image?: string;
+  description?: string;
+}
+
+// Aliases for backward compatibility
 export type Product = IProduct;
 export type ProductFilter = IProductFilter;
-export type Category = ICategory;

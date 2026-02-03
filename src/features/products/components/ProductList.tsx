@@ -1,8 +1,6 @@
 /**
  * @file ProductList.tsx
- * @description ProductList component
- * @author Kindy
- * @created 2025-11-16
+ * @description ProductList component using new backend
  */
 
 import { useProducts } from '../hooks/useProducts';
@@ -26,9 +24,8 @@ export function ProductList() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {products.map((product) => (
-        <ProductCard key={product.id} product={product} />
+        <ProductCard key={product._id} product={product} />
       ))}
     </div>
   );
 }
-

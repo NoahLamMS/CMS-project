@@ -1,8 +1,8 @@
 /**
  * @file index.ts
  * @description Core API barrel export
- * @author Kindy
- * @created 2025-11-16
+ * @author HoangPhuc
+ * @created 03-02-2026
  */
 
 export { apiClient } from './client';

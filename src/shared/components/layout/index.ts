@@ -1,8 +1,8 @@
 /**
  * @file index.ts
  * @description Layout components exports
- * @author Kindy
- * @created 2025-11-16
+ * @author HoangPhuc
+ * @created 03-02-2026
  */
 
 export { Sidebar } from './Sidebar';

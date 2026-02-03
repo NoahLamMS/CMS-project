@@ -1,8 +1,8 @@
 /**
  * @file useCollaborators.ts
  * @description Custom hook for collaborator management
- * @author Kindy
- * @created 2025-11-16
+ * @author HoangPhuc
+ * @created 03-02-2026
  */
 
 import { useState, useEffect, useCallback, useMemo } from 'react';

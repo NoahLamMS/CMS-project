@@ -1,15 +1,13 @@
 /**
  * @file auth.types.ts
- * @description Auth types
- * @author Kindy
- * @created 2025-11-16
+ * @description Auth types matching ecommerce-nodejs backend
  */
 
 export interface AuthUser {
-  id: string;
+  _id: string;
+  username: string;
   email: string;
-  name: string;
-  avatar?: string;
+  role: 'admin' | 'user';
 }
 
 export interface LoginCredentials {
@@ -18,8 +16,15 @@ export interface LoginCredentials {
 }
 
 export interface RegisterData {
+  username: string;
   email: string;
   password: string;
-  name: string;
+  confirmPassword: string;
+  age?: number;
 }
 
+export interface AuthResponse {
+  message: string;
+  token: string;
+  user: AuthUser;
+}

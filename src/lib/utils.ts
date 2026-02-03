@@ -1,8 +1,8 @@
 /**
  * @file utils.ts
  * @description Utility functions
- * @author Kindy
- * @created 2025-11-16
+ * @author HoangPhuc
+ * @created 03-02-2026
  */
 
 import { type ClassValue, clsx } from 'clsx';

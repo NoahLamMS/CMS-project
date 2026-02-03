@@ -1,8 +1,8 @@
 /**
  * @file CollaboratorsPage.tsx
  * @description Collaborators management page with Table, Search, Filter
- * @author Kindy
- * @created 2025-11-16
+ * @author HoangPhuc
+ * @created 03-02-2026
  */
 
 import { useState, useCallback, useMemo } from 'react';

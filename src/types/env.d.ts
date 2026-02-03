@@ -1,8 +1,8 @@
 /**
  * @file env.d.ts
  * @description Environment variables type definitions
- * @author Kindy
- * @created 2025-11-16
+ * @author HoangPhuc
+ * @created 03-02-2026
  */
 
 declare namespace NodeJS {
