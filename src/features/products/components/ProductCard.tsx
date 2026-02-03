@@ -5,8 +5,6 @@
  * @created 2025-11-16
  */
 
-'use client';
-
 import { Product } from '../types/product.types';
 
 interface ProductCardProps {
@@ -21,7 +19,7 @@ export function ProductCard({ product, onPress }: ProductCardProps) {
       onClick={() => onPress?.(product)}
     >
       <h3 className="font-semibold text-lg">{product.name}</h3>
-      <p className="text-gray-600 text-sm">{product.category}</p>
+      <p className="text-gray-600 text-sm">{product.category.name}</p>
       <p className="text-blue-600 font-bold text-xl mt-2">{product.price.toLocaleString('vi-VN')}đ</p>
     </div>
   );

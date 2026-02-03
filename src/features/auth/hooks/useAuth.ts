@@ -5,8 +5,6 @@
  * @created 2025-11-16
  */
 
-'use client';
-
 import { useAuthStore } from '../store/authStore';
 
 export function useAuth() {

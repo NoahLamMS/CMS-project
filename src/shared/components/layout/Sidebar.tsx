@@ -1,69 +1,134 @@
 /**
  * @file Sidebar.tsx
- * @description Sidebar component
+ * @description Sidebar navigation component using Ant Design Menu
  * @author Kindy
  * @created 2025-11-16
  */
 
-'use client';
+import { useState, useCallback, useMemo } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Layout, Menu, Typography, Button } from 'antd';
+import type { MenuProps } from 'antd';
+import {
+  DashboardOutlined,
+  ShoppingOutlined,
+  CarOutlined,
+  DatabaseOutlined,
+  TeamOutlined,
+  ShoppingCartOutlined,
+  GiftOutlined,
+  UserOutlined,
+  MessageOutlined,
+  LeftOutlined,
+  RightOutlined,
+} from '@ant-design/icons';
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { cn } from '@/lib/utils';
+const { Sider } = Layout;
+const { Text } = Typography;
 
-const menuItems = [
-  { name: 'Dashboard', href: '/dashboard', icon: '📊' },
-  { name: 'Sản Phẩm', href: '/products', icon: '🛍️' },
-  { name: 'Đơn Hàng', href: '/orders', icon: '📦' },
-  { name: 'Khách Hàng', href: '/customers', icon: '👥' },
-  { name: 'Báo Cáo', href: '/reports', icon: '📈' },
-  { name: 'Cài Đặt', href: '/settings', icon: '⚙️' },
+interface MenuItem {
+  key: string;
+  icon: React.ReactNode;
+  label: string;
+  children?: MenuItem[];
+}
+
+interface SidebarProps {
+  collapsed?: boolean;
+  onCollapse?: (collapsed: boolean) => void;
+}
+
+const menuItems: MenuItem[] = [
+  { key: '/dashboard', icon: <DashboardOutlined />, label: 'Tổng quan' },
+  { key: '/products', icon: <ShoppingOutlined />, label: 'Quản lý sản phẩm' },
+  { key: '/drivers', icon: <CarOutlined />, label: 'Quản lý tài xế' },
+  {
+    key: '/warehouse',
+    icon: <DatabaseOutlined />,
+    label: 'Quản lý kho',
+    children: [
+      { key: '/warehouse/inventory', icon: null, label: 'Tồn kho' },
+      { key: '/warehouse/import', icon: null, label: 'Nhập kho' },
+      { key: '/warehouse/export', icon: null, label: 'Xuất kho' },
+    ],
+  },
+  { key: '/collaborators', icon: <TeamOutlined />, label: 'Quản lý cộng tác viên' },
+  { key: '/orders', icon: <ShoppingCartOutlined />, label: 'Xử lý đơn hàng' },
+  { key: '/marketing', icon: <GiftOutlined />, label: 'Tiếp thị & Khuyến mãi' },
+  { key: '/customers', icon: <UserOutlined />, label: 'Quản lý khách hàng' },
+  { key: '/messages', icon: <MessageOutlined />, label: 'Tin nhắn' },
 ];
 
-export function Sidebar() {
-  const pathname = usePathname();
+export function Sidebar({ collapsed = false, onCollapse }: SidebarProps) {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [isCollapsed, setIsCollapsed] = useState(collapsed);
+
+  const selectedKeys = useMemo(() => {
+    return [location.pathname];
+  }, [location.pathname]);
+
+  const defaultOpenKeys = useMemo(() => {
+    const path = location.pathname;
+    const parent = menuItems.find(item =>
+      item.children?.some(child => child.key === path)
+    );
+    return parent ? [parent.key] : [];
+  }, [location.pathname]);
+
+  const handleMenuClick: MenuProps['onClick'] = useCallback(({ key }: { key: string }) => {
+    navigate(key);
+  }, [navigate]);
+
+  const handleCollapse = useCallback((value: boolean) => {
+    setIsCollapsed(value);
+    onCollapse?.(value);
+  }, [onCollapse]);
 
   return (
-    <aside className="w-64 bg-white border-r border-gray-200 flex flex-col">
-      <div className="p-6 border-b border-gray-200">
-        <h2 className="text-xl font-bold text-gray-800">NextBase</h2>
-        <p className="text-sm text-gray-500">Admin Panel</p>
-      </div>
-      <nav className="flex-1 p-4">
-        <ul className="space-y-2">
-          {menuItems.map((item) => {
-            const isActive = pathname === item.href;
-            return (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  className={cn(
-                    'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
-                    isActive
-                      ? 'bg-blue-50 text-blue-600 font-medium'
-                      : 'text-gray-700 hover:bg-gray-50'
-                  )}
-                >
-                  <span className="text-xl">{item.icon}</span>
-                  <span>{item.name}</span>
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
-      <div className="p-4 border-t border-gray-200">
-        <div className="flex items-center gap-3 px-4 py-3">
-          <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-semibold">
-            K
-          </div>
-          <div className="flex-1">
-            <p className="text-sm font-medium text-gray-800">Kindy</p>
-            <p className="text-xs text-gray-500">Admin</p>
-          </div>
+    <Sider
+      collapsible
+      collapsed={isCollapsed}
+      onCollapse={handleCollapse}
+      width={260}
+      collapsedWidth={80}
+      trigger={null}
+      className="h-screen sticky top-0 left-0 bg-white border-r border-gray-200"
+      theme="light"
+    >
+      <div className="flex items-center gap-3 p-4 border-b border-gray-100">
+        <div className="w-10 h-10 rounded-lg bg-orange-500 flex items-center justify-center">
+          <span className="text-white font-bold text-lg">M</span>
         </div>
+        {!isCollapsed && (
+          <div>
+            <Text strong className="text-orange-600 text-lg block leading-tight">
+              MEBI FARM
+            </Text>
+          </div>
+        )}
       </div>
-    </aside>
+
+      <Menu
+        mode="inline"
+        selectedKeys={selectedKeys}
+        defaultOpenKeys={defaultOpenKeys}
+        onClick={handleMenuClick}
+        items={menuItems as MenuProps['items']}
+        className="border-none flex-1"
+        style={{ height: 'calc(100vh - 140px)', overflowY: 'auto' }}
+      />
+
+      <div className="absolute bottom-4 left-0 right-0 flex justify-center">
+        <Button
+          type="text"
+          icon={isCollapsed ? <RightOutlined /> : <LeftOutlined />}
+          onClick={() => handleCollapse(!isCollapsed)}
+          className="text-gray-400 hover:text-gray-600"
+        />
+      </div>
+    </Sider>
   );
 }
 
+export default Sidebar;

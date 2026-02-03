@@ -5,13 +5,11 @@
  * @created 2025-11-16
  */
 
-'use client';
-
 import { useProducts } from '../hooks/useProducts';
 import { ProductCard } from './ProductCard';
 
 export function ProductList() {
-  const { data: products, isLoading, error } = useProducts();
+  const { products, isLoading, error } = useProducts();
 
   if (isLoading) {
     return <div>Loading...</div>;

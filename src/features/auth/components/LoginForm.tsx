@@ -5,15 +5,13 @@
  * @created 2025-11-16
  */
 
-'use client';
-
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { Input, Button } from '@/shared/components/ui';
 
 export function LoginForm() {
-  const router = useRouter();
+  const navigate = useNavigate();
   const { login, loading } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -30,8 +28,8 @@ export function LoginForm() {
 
     try {
       await login({ email, password });
-      router.push('/dashboard');
-    } catch (err) {
+      navigate('/dashboard');
+    } catch {
       setError('Đăng nhập thất bại. Vui lòng thử lại.');
     }
   };
@@ -43,7 +41,7 @@ export function LoginForm() {
           {error}
         </div>
       )}
-      
+
       <Input
         label="Email"
         type="email"
@@ -52,7 +50,7 @@ export function LoginForm() {
         onChange={(e) => setEmail(e.target.value)}
         required
       />
-      
+
       <Input
         label="Mật Khẩu"
         type="password"

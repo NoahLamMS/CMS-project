@@ -1,11 +1,9 @@
 /**
  * @file authStore.ts
- * @description Auth Store - Zustand
+ * @description Auth Store using Zustand for state management
  * @author Kindy
  * @created 2025-11-16
  */
-
-'use client';
 
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
@@ -33,7 +31,6 @@ export const useAuthStore = create<AuthState>()(
       login: async (credentials: LoginCredentials) => {
         set({ loading: true });
         try {
-          // Call API using axios
           const response = await authApi.login(credentials);
           set({
             user: response.user,
@@ -50,7 +47,6 @@ export const useAuthStore = create<AuthState>()(
       register: async (data: RegisterData) => {
         set({ loading: true });
         try {
-          // Call API using axios
           const response = await authApi.register(data);
           set({
             user: response.user,
@@ -66,10 +62,8 @@ export const useAuthStore = create<AuthState>()(
 
       logout: async () => {
         try {
-          // Call API to logout
           await authApi.logout();
         } catch (error) {
-          // Even if API fails, clear local state
           console.error('Logout error:', error);
         } finally {
           set({
@@ -86,4 +80,3 @@ export const useAuthStore = create<AuthState>()(
     }
   )
 );
-

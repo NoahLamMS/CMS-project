@@ -7,7 +7,6 @@
 
 import axios, { AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import { ENV } from '@/core/config/env';
-import { useAuthStore } from '@/features/auth/store/authStore';
 
 export const apiClient: AxiosInstance = axios.create({
   baseURL: ENV.API_URL,
@@ -20,10 +19,17 @@ export const apiClient: AxiosInstance = axios.create({
 // Request interceptor - Add auth token
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    // Get token from store
-    const token = useAuthStore.getState().token;
-    if (token && config.headers) {
-      config.headers.Authorization = `Bearer ${token}`;
+    // Get token from localStorage to avoid circular dependency
+    const authStorage = localStorage.getItem('auth-storage');
+    if (authStorage) {
+      try {
+        const { state } = JSON.parse(authStorage);
+        if (state?.token && config.headers) {
+          config.headers.Authorization = `Bearer ${state.token}`;
+        }
+      } catch {
+        // Ignore parse errors
+      }
     }
     return config;
   },
@@ -40,9 +46,9 @@ apiClient.interceptors.response.use(
   (error) => {
     // Handle 401 - Unauthorized
     if (error.response?.status === 401) {
-      // Logout user
-      useAuthStore.getState().logout();
-      // Redirect to login (only on client side)
+      // Clear auth storage
+      localStorage.removeItem('auth-storage');
+      // Redirect to login
       if (typeof window !== 'undefined') {
         window.location.href = '/login';
       }
@@ -56,4 +62,3 @@ apiClient.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
