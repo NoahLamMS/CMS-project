@@ -1,8 +1,8 @@
 /**
  * @file layout.tsx
  * @description Main layout with sidebar
- * @author Kindy
- * @created 2025-11-16
+ * @author HoangPhuc
+ * @created 03-02-2026
  */
 
 import { Sidebar } from '@/shared/components/layout/Sidebar';

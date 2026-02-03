@@ -1,8 +1,8 @@
 /**
  * @file MainLayout.tsx
  * @description Main layout wrapper with Sidebar and Header
- * @author Kindy
- * @created 2025-11-16
+ * @author HoangPhuc
+ * @created 03-02-2026
  */
 
 import { useState, useCallback } from 'react';

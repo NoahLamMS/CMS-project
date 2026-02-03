@@ -1,8 +1,8 @@
 /**
  * @file page.tsx
  * @description Home page - redirect to login or dashboard
- * @author Kindy
- * @created 2025-11-16
+ * @author HoangPhuc
+ * @created 03-02-2026
  */
 
 import { redirect } from 'next/navigation';

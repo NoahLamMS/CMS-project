@@ -1,22 +1,23 @@
 /**
  * @file index.ts
  * @description Auth feature - Public API
- * @author Kindy
- * @created 2025-11-16
  */
 
-// Export components
+// Components
 export { LoginForm } from './components/LoginForm';
 
-// Export hooks
+// Pages
+export { LoginPage } from './pages/LoginPage';
+export { RegisterPage } from './pages/RegisterPage';
+
+// Hooks
 export { useAuth } from './hooks/useAuth';
 
-// Export API
+// API
 export { authApi } from './api/authApi';
 
-// Export store
+// Store
 export { useAuthStore } from './store/authStore';
 
-// Export types
-export type { AuthUser, LoginCredentials, RegisterData } from './types/auth.types';
-
+// Types
+export type { AuthUser, LoginCredentials, RegisterData, AuthResponse } from './types/auth.types';

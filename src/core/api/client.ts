@@ -1,8 +1,8 @@
 /**
  * @file client.ts
  * @description API Client - Axios instance with interceptors
- * @author Kindy
- * @created 2025-11-16
+ * @author HoangPhuc
+ * @created 03-02-2026
  */
 
 import axios, { AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios';

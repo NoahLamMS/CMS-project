@@ -1,8 +1,8 @@
 /**
  * @file page.tsx
  * @description Reports page
- * @author Kindy
- * @created 2025-11-16
+ * @author HoangPhuc
+ * @created 03-02-2026
  */
 
 import { Card } from '@/shared/components/ui';

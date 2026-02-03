@@ -1,8 +1,8 @@
 /**
  * @file main.tsx
  * @description Application entry point for Vite
- * @author Kindy
- * @created 2025-11-16
+ * @author HoangPhuc
+ * @created 03-02-2026
  */
 
 import React from 'react';

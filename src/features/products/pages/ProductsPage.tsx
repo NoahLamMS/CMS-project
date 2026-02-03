@@ -1,8 +1,6 @@
 /**
  * @file ProductsPage.tsx
- * @description Products management page with Table, Tabs, Search, Filter
- * @author Kindy
- * @created 2025-11-16
+ * @description Products management page with full CRUD - List, Add, Edit, Delete, View Detail
  */
 
 import { useState, useCallback, useMemo } from 'react';
@@ -11,26 +9,28 @@ import {
     Table,
     Input,
     Button,
-    Tabs,
-    Tag,
     Space,
     Avatar,
     Dropdown,
     Typography,
     Flex,
+    message,
+    Popconfirm,
+    Empty,
 } from 'antd';
-import type { TableProps, TabsProps } from 'antd';
+import type { TableProps } from 'antd';
 import {
     SearchOutlined,
-    FilterOutlined,
     PlusOutlined,
     MoreOutlined,
     EditOutlined,
     DeleteOutlined,
     EyeOutlined,
+    ReloadOutlined,
 } from '@ant-design/icons';
-import { useProducts } from '../hooks/useProducts';
-import { ProductStatus } from '../types/product.types';
+import { useProducts, useDeleteProduct } from '../hooks/useProducts';
+import { ProductModal } from '../components/ProductModal';
+import { ProductDetailModal } from '../components/ProductDetailModal';
 import type { IProduct } from '../types/product.types';
 
 const { Text } = Typography;
@@ -39,47 +39,36 @@ interface ProductsPageProps {
     className?: string;
 }
 
-interface TabConfig {
-    key: string;
-    label: string;
-    status?: ProductStatus;
-    count?: number;
-}
-
 export function ProductsPage({ className }: ProductsPageProps) {
-    const [activeTab, setActiveTab] = useState<string>('all');
     const [searchValue, setSearchValue] = useState('');
+
+    // Edit/Add Modal State
+    const [modalOpen, setModalOpen] = useState(false);
+    const [editingProduct, setEditingProduct] = useState<IProduct | null>(null);
+
+    // View Detail Modal State
+    const [detailModalOpen, setDetailModalOpen] = useState(false);
+    const [viewingProductId, setViewingProductId] = useState<string | null>(null);
 
     const {
         products,
         total,
         isLoading,
+        isFetching,
         page,
         pageSize,
         setPage,
         setPageSize,
         setSearch,
-        setStatus,
+        refetch,
     } = useProducts();
+
+    const deleteProduct = useDeleteProduct();
 
     const handleSearch = useCallback((value: string) => {
         setSearchValue(value);
         setSearch(value);
     }, [setSearch]);
-
-    const handleTabChange = useCallback((key: string) => {
-        setActiveTab(key);
-        switch (key) {
-            case 'in_stock':
-                setStatus(ProductStatus.IN_STOCK);
-                break;
-            case 'out_of_stock':
-                setStatus(ProductStatus.OUT_OF_STOCK);
-                break;
-            default:
-                setStatus(undefined);
-        }
-    }, [setStatus]);
 
     const handlePageChange = useCallback((newPage: number, newPageSize: number) => {
         setPage(newPage);
@@ -87,100 +76,108 @@ export function ProductsPage({ className }: ProductsPageProps) {
     }, [setPage, setPageSize]);
 
     const handleAddProduct = useCallback(() => {
-        console.log('Add product clicked');
+        setEditingProduct(null);
+        setModalOpen(true);
     }, []);
 
     const handleEdit = useCallback((product: IProduct) => {
-        console.log('Edit product:', product.id);
-    }, []);
-
-    const handleDelete = useCallback((product: IProduct) => {
-        console.log('Delete product:', product.id);
+        setEditingProduct(product);
+        setModalOpen(true);
     }, []);
 
     const handleView = useCallback((product: IProduct) => {
-        console.log('View product:', product.id);
+        setViewingProductId(product._id);
+        setDetailModalOpen(true);
     }, []);
+
+    const handleDelete = useCallback(async (product: IProduct) => {
+        try {
+            await deleteProduct.mutateAsync(product._id);
+            message.success('Xóa sản phẩm thành công!');
+        } catch {
+            message.error('Xóa sản phẩm thất bại!');
+        }
+    }, [deleteProduct]);
+
+    const handleModalClose = useCallback(() => {
+        setModalOpen(false);
+        setEditingProduct(null);
+    }, []);
+
+    const handleDetailModalClose = useCallback(() => {
+        setDetailModalOpen(false);
+        setViewingProductId(null);
+    }, []);
+
+    const handleModalSuccess = useCallback(() => {
+        refetch();
+    }, [refetch]);
 
     const columns = useMemo<TableProps<IProduct>['columns']>(() => [
         {
             title: 'ID',
-            dataIndex: 'id',
-            key: 'id',
+            dataIndex: '_id',
+            key: '_id',
             width: 100,
             render: (id: string) => (
-                <Text className="text-gray-600">{id}</Text>
+                <Text className="text-gray-500 text-xs font-mono">
+                    ...{id.slice(-6)}
+                </Text>
             ),
         },
         {
-            title: 'Tên sản phẩm',
+            title: 'Sản phẩm',
             dataIndex: 'name',
             key: 'name',
             render: (name: string, record: IProduct) => (
                 <Flex align="center" gap={12}>
                     <Avatar
                         shape="square"
-                        size={40}
+                        size={48}
                         src={record.image}
-                        className="bg-orange-100"
+                        className="bg-gradient-to-br from-orange-100 to-orange-200"
                     >
-                        🥚
+                        🛒
                     </Avatar>
-                    <Text strong>{name}</Text>
+                    <div>
+                        <Text strong className="block">{name}</Text>
+                        <Text className="text-gray-400 text-xs">
+                            {record.description?.slice(0, 50) || 'Chưa có mô tả'}
+                            {record.description && record.description.length > 50 ? '...' : ''}
+                        </Text>
+                    </div>
                 </Flex>
-            ),
-        },
-        {
-            title: 'Danh mục',
-            dataIndex: 'category',
-            key: 'category',
-            width: 120,
-            render: (category: IProduct['category']) => (
-                <Tag color="blue" className="rounded-full">
-                    {category.name}
-                </Tag>
             ),
         },
         {
             title: 'Giá bán',
             dataIndex: 'price',
             key: 'price',
-            width: 120,
-            align: 'right',
-            render: (price: number) => (
-                <Text>{price.toLocaleString('vi-VN')} VNĐ</Text>
-            ),
-        },
-        {
-            title: 'Số lượng tồn kho',
-            dataIndex: 'stockQuantity',
-            key: 'stockQuantity',
             width: 150,
-            align: 'center',
-            render: (qty: number) => (
-                <Text className={qty === 0 ? 'text-red-500' : 'text-gray-800'}>
-                    {qty}
+            align: 'right',
+            sorter: (a, b) => a.price - b.price,
+            render: (price: number) => (
+                <Text className="text-blue-600 font-semibold">
+                    {price?.toLocaleString('vi-VN')} đ
                 </Text>
             ),
         },
         {
-            title: 'Trạng thái',
-            dataIndex: 'status',
-            key: 'status',
+            title: 'Ngày tạo',
+            dataIndex: 'createdAt',
+            key: 'createdAt',
             width: 120,
-            render: (status: ProductStatus) => (
-                <Tag
-                    color={status === ProductStatus.IN_STOCK ? 'success' : 'error'}
-                    className="rounded-full"
-                >
-                    {status === ProductStatus.IN_STOCK ? 'Còn hàng' : 'Hết hàng'}
-                </Tag>
+            render: (date: string) => (
+                <Text className="text-gray-500 text-sm">
+                    {date ? new Date(date).toLocaleDateString('vi-VN') : '-'}
+                </Text>
             ),
         },
         {
             title: '',
             key: 'actions',
-            width: 50,
+            width: 60,
+            fixed: 'right',
             render: (_: unknown, record: IProduct) => (
                 <Dropdown
                     menu={{
@@ -201,13 +198,24 @@ export function ProductsPage({ className }: ProductsPageProps) {
                             {
                                 key: 'delete',
                                 icon: <DeleteOutlined />,
-                                label: 'Xóa',
                                 danger: true,
-                                onClick: () => handleDelete(record),
+                                label: (
+                                    <Popconfirm
+                                        title="Xác nhận xóa?"
+                                        description={`Bạn có chắc muốn xóa "${record.name}"?`}
+                                        onConfirm={() => handleDelete(record)}
+                                        okText="Xóa"
+                                        cancelText="Hủy"
+                                        okButtonProps={{ danger: true }}
+                                    >
+                                        <span className="text-red-500">Xóa sản phẩm</span>
+                                    </Popconfirm>
+                                ),
                             },
                         ],
                     }}
                     trigger={['click']}
+                    placement="bottomRight"
                 >
                     <Button type="text" icon={<MoreOutlined />} />
                 </Dropdown>
@@ -215,77 +223,53 @@ export function ProductsPage({ className }: ProductsPageProps) {
         },
     ], [handleView, handleEdit, handleDelete]);
 
-    const tabItems = useMemo<TabsProps['items']>(() => {
-        const tabs: TabConfig[] = [
-            { key: 'all', label: 'Tất cả', count: 100 },
-            { key: 'in_stock', label: 'Còn hàng', count: 90 },
-            { key: 'out_of_stock', label: 'Hết hàng', count: 10 },
-        ];
-
-        return tabs.map(tab => ({
-            key: tab.key,
-            label: (
-                <span>
-                    {tab.label}
-                    {tab.count !== undefined && (
-                        <span className="ml-1 text-gray-400">({tab.count})</span>
-                    )}
-                </span>
-            ),
-        }));
-    }, []);
-
     return (
         <div className={className}>
             <Flex justify="space-between" align="center" className="mb-6">
-                <Text strong className="text-2xl text-gray-800">
-                    Quản lý sản phẩm
-                </Text>
+                <div>
+                    <Text strong className="text-2xl text-gray-800 block">
+                        Quản lý sản phẩm
+                    </Text>
+                    <Text className="text-gray-500">
+                        Tổng cộng {total} sản phẩm
+                    </Text>
+                </div>
+                <Button
+                    type="primary"
+                    icon={<PlusOutlined />}
+                    onClick={handleAddProduct}
+                    size="large"
+                    className="bg-orange-500 hover:bg-orange-600"
+                >
+                    Thêm sản phẩm
+                </Button>
             </Flex>
 
-            <Card className="shadow-sm rounded-lg">
+            <Card className="shadow-sm rounded-xl">
                 <Flex justify="space-between" align="center" className="mb-4">
                     <Space>
                         <Input
-                            placeholder="Tìm kiếm"
+                            placeholder="Tìm kiếm sản phẩm..."
                             prefix={<SearchOutlined className="text-gray-400" />}
                             value={searchValue}
                             onChange={(e) => handleSearch(e.target.value)}
-                            className="w-64"
+                            className="w-72"
                             allowClear
                         />
-                        <Button icon={<FilterOutlined />}>
-                            Lọc
-                        </Button>
                     </Space>
 
                     <Button
-                        type="primary"
-                        icon={<PlusOutlined />}
-                        onClick={handleAddProduct}
-                        className="bg-orange-500 hover:bg-orange-600"
+                        icon={<ReloadOutlined spin={isFetching} />}
+                        onClick={() => refetch()}
                     >
-                        Thêm sản phẩm
-                    </Button>
-                </Flex>
-
-                <Flex justify="space-between" align="center" className="mb-4">
-                    <Tabs
-                        activeKey={activeTab}
-                        onChange={handleTabChange}
-                        items={tabItems}
-                        className="mb-0"
-                    />
-
-                    <Button type="text" className="text-gray-500">
-                        Ẩn/Hiện cột ▾
+                        Làm mới
                     </Button>
                 </Flex>
 
                 <Table<IProduct>
                     columns={columns}
                     dataSource={products}
-                    rowKey="id"
+                    rowKey="_id"
                     loading={isLoading}
                     pagination={{
                         current: page,
@@ -293,14 +277,39 @@ export function ProductsPage({ className }: ProductsPageProps) {
                         total: total,
                         showSizeChanger: true,
                         showQuickJumper: true,
-                        pageSizeOptions: ['10', '20', '50', '100'],
+                        pageSizeOptions: ['5', '10', '20', '50'],
                         onChange: handlePageChange,
                         showTotal: (total, range) =>
                             `${range[0]}-${range[1]} của ${total} sản phẩm`,
                     }}
-                    className="products-table"
+                    locale={{
+                        emptyText: (
+                            <Empty
+                                image={Empty.PRESENTED_IMAGE_SIMPLE}
+                                description="Chưa có sản phẩm nào"
+                            >
+                                <Button type="primary" onClick={handleAddProduct}>
+                                    Thêm sản phẩm đầu tiên
+                                </Button>
+                            </Empty>
+                        ),
+                    }}
+                    scroll={{ x: 800 }}
                 />
             </Card>
+
+            <ProductModal
+                open={modalOpen}
+                product={editingProduct}
+                onClose={handleModalClose}
+                onSuccess={handleModalSuccess}
+            />
+
+            <ProductDetailModal
+                open={detailModalOpen}
+                productId={viewingProductId}
+                onClose={handleDetailModalClose}
+            />
         </div>
     );
 }

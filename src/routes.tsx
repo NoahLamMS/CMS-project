@@ -1,8 +1,6 @@
 /**
  * @file routes.tsx
- * @description Application routes configuration using React Router v6
- * @author Kindy
- * @created 2025-11-16
+ * @description Application routes configuration with auth pages
  */
 
 import { useRoutes, Navigate } from 'react-router-dom';
@@ -10,21 +8,7 @@ import type { RouteObject } from 'react-router-dom';
 import { MainLayout } from '@/shared/components/layout';
 import { ProductsPage } from '@/features/products';
 import { CollaboratorsPage } from '@/features/collaborators';
-
-function LoginPage() {
-    return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100">
-            <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-                <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">
-                    Đăng nhập
-                </h1>
-                <p className="text-center text-gray-500">
-                    Trang đăng nhập sẽ được xây dựng ở đây
-                </p>
-            </div>
-        </div>
-    );
-}
+import { LoginPage, RegisterPage } from '@/features/auth';
 
 function DashboardPage() {
     return (
@@ -48,6 +32,10 @@ const routes: RouteObject[] = [
     {
         path: '/login',
         element: <LoginPage />,
+    },
+    {
+        path: '/register',
+        element: <RegisterPage />,
     },
     {
         path: '/',

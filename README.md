@@ -1,158 +1,115 @@
-# CMS project - Hệ thống quản lý bán hàng
+# CMS Project - Hệ thống quản lý bán hàng (Fullstack)
 
-Hệ thống CMS quản lý bán hàng xây dựng với **Vite + React + TypeScript + Ant Design**.
+Hệ thống CMS quản lý bán hàng````````` toàn diện với Frontend React/Vite và Backend Node.js/Express.
 
 ## 🚀 Tech Stack
 
-### Core
-- **Vite 6.0** - Build tool & dev server
-- **React 18** - UI library
-- **TypeScript** - Type safety
-- **React Router v6** - Client-side routing
+### Frontend
+- **Framework**: React 18, Vite 6.0
+- **Language**: TypeScript
+- **UI Libraries**: Ant Design 5, Tailwind CSS v4
+- **State Management**: Zustand (Client), TanStack Query (Server)
+- **Routing**: React Router v6
+- **HTTP Client**: Axios
 
-### State Management
-- **Zustand** - Client state management
-- **TanStack Query (React Query)** - Server state management
-
-### UI Framework
-- **Ant Design 5** - Enterprise UI components
-- **Tailwind CSS v4** - Utility-first CSS framework
-
-### API
-- **Axios** - HTTP client
+### Backend (`ecommerce-nodejs`)
+- **Runtime**: Node.js
+- **Framework**: Express.js
+- **Database**: MongoDB + Mongoose
+- **Authentication**: JWT (JSON Web Tokens)
+- **Security**: bcryptjs, cors
 
 ## 📁 Project Structure
 
 ```
-src/
-├── app/                  # Global styles
-│   └── globals.css       # Tailwind + Ant Design customization
-├── features/             # Feature-based modules
-│   ├── auth/             # Authentication feature
-│   ├── collaborators/    # Collaborators management
-│   └── products/         # Products management
-├── shared/               # Shared components
-│   └── components/
-│       └── layout/       # Layout components (Sidebar, Header, MainLayout)
-├── core/                 # Core infrastructure
-│   └── api/              # API client (Axios)
-├── lib/                  # Library setup (React Query)
-├── App.tsx               # Root component với Ant Design ConfigProvider
-├── routes.tsx            # React Router configuration
-└── main.tsx              # Application entry point
+CMS-project/
+├── ecommerce-nodejs/     # Backend Server
+│   ├── src/
+│   │   ├── config/       # DB Connection
+│   │   ├── controllers/  # Route Logic
+│   │   ├── middleware/   # Auth Middleware
+│   │   ├── model/        # Mongoose Models
+│   │   └── routers/      # API Routes
+│   └── package.json
+│
+├── src/                  # Frontend Client
+│   ├── features/         # Feature Modules
+│   │   ├── auth/         # Login, Register pages & logic
+│   │   ├── products/     # Product CRUD & UI
+│   │   └── ...
+│   ├── core/             # API Config & Envs
+│   ├── shared/           # Common components
+│   └── App.tsx
+└── README.md
 ```
 
 ## ✅ Implemented Features
 
-### Collaborators Management (Quản lý cộng tác viên)
-- Danh sách cộng tác viên với Table
-- Search by name/code
-- Filter button
-- Pagination
-- Cột: Mã CTV, Tên CTV, Tổng đơn hàng, Tổng giá trị, % Hoa hồng, Cấp bậc, Hoa hồng nhận được
-- Actions dropdown (View, Edit, Delete)
+### 🔐 Authentication
+- **Đăng ký (Register)**: Tạo tài khoản mới, validate dữ liệu.
+- **Đăng nhập (Login)**: Xác thực, nhận JWT token, lưu trữ vào localStorage.
+- **Protected Routes**: Chuyển hướng nếu chưa đăng nhập.
 
-### Products Management (Quản lý sản phẩm)
-- Danh sách sản phẩm với Table
-- Tabs: Tất cả, Còn hàng, Hết hàng
-- Search & Filter
-- Pagination
-- Cột: ID, Tên sản phẩm, Danh mục, Giá bán, Số lượng tồn kho, Trạng thái
+### 📦 Products Management (Full CRUD)
+- **Danh sách**: Hiển thị sản phẩm từ Database, phân trang server-side.
+- **Xem chi tiết**: Modal hiển thị thông tin đầy đủ.
+- **Thêm mới**: Form tạo sản phẩm mới.
+- **Chỉnh sửa**: Cập nhật thông tin sản phẩm.
+- **Xóa**: Xóa mềm/cứng sản phẩm có xác nhận.
+- **Tìm kiếm**: Tìm kiếm theo tên sản phẩm realtime.
 
-### Layout System
-- **Sidebar** - Navigation menu với các routes
-- **Header** - Title, Language selector, Notifications, User dropdown
-- **MainLayout** - Wrapper component with Outlet
-
-## 📦 Feature Structure
-
-Mỗi feature tuân theo cấu trúc:
-
-```
-features/{feature-name}/
-├── pages/         # Page components
-├── components/    # Feature-specific components
-├── hooks/         # Custom hooks (useProducts, useCollaborators)
-├── types/         # TypeScript interfaces & enums
-└── index.ts       # Public API exports
-```
-
-### File Header Convention
-
-Mỗi file đều có header description:
-
-```typescript
-/**
- * @file filename.ts
- * @description Description of the file
- * @author Kindy
- * @created 2025-11-16
- */
-```
+### 👥 Collaborators Management
+- Quản lý danh sách cộng tác viên (UI-only currently).
 
 ## 🛠️ Getting Started
 
 ### Prerequisites
 - Node.js >= 18
-- npm or yarn
+- MongoDB (đang chạy tại `mongodb://localhost:27017`)
 
-### Installation
+### 1. Start Backend
 
 ```bash
-# Install dependencies
+cd ecommerce-nodejs
 npm install
-
-# Run development server
 npm run dev
 ```
+Backend sẽ chạy tại `http://localhost:3000`
 
-Mở [http://localhost:6868](http://localhost:6868) để xem ứng dụng.
+### 2. Start Frontend
 
-## 📜 Available Scripts
-
-| Script | Description |
-|--------|-------------|
-| `npm run dev` | Start development server |
-| `npm run build` | Build for production |
-| `npm run preview` | Preview production build |
-| `npm run lint` | Run ESLint |
-
-## 🎨 Styling
-
-### Ant Design Theme
-```typescript
-const theme = {
-    token: {
-        colorPrimary: '#F97316', // Orange-500
-        borderRadius: 8,
-    },
-    components: {
-        Menu: {
-            itemSelectedBg: '#FFF7ED',
-            itemSelectedColor: '#EA580C',
-        },
-    },
-};
+Mở terminal mới:
+```bash
+# Tại thư mục gốc CMS-project
+npm install
+npm run dev
 ```
+Frontend sẽ chạy tại `http://localhost:6868`
 
-### Tailwind CSS
-Custom utilities và Ant Design overrides trong `src/app/globals.css`.
+## 🔌 API Endpoints
+
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| POST | `/api/signup` | Đăng ký tài khoản | Public |
+| POST | `/api/signin` | Đăng nhập lấy Token | Public |
+| GET | `/api/products` | Lấy danh sách sản phẩm | Public |
+| GET | `/api/products/:id` | Lấy chi tiết sản phẩm | Public |
+| POST | `/api/products` | Tạo sản phẩm mới | Admin |
+| PUT | `/api/products/:id` | Cập nhật sản phẩm | Admin |
+| DELETE | `/api/products/:id` | Xóa sản phẩm | Admin |
 
 ## 📖 Routes
 
 | Path | Page |
 |------|------|
-| `/dashboard` | Tổng quan |
+| `/login` | Trang Đăng nhập |
+| `/register` | Trang Đăng ký |
+| `/dashboard` | Tổng quan hệ thống |
 | `/products` | Quản lý sản phẩm |
 | `/collaborators` | Quản lý cộng tác viên |
-| `/drivers` | Quản lý tài xế |
-| `/warehouse` | Quản lý kho |
-| `/orders` | Xử lý đơn hàng |
-| `/marketing` | Tiếp thị & Khuyến mãi |
-| `/customers` | Quản lý khách hàng |
-| `/messages` | Tin nhắn |
-| `/settings` | Cài đặt |
 
 ## 👤 Author
 
-**Kindy** - Created on 2025-11-16
+**HoangPhuc**
+- Created: 03-02-2026
+- Last Updated: 03-02-2026

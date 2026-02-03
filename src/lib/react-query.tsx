@@ -1,8 +1,8 @@
 /**
  * @file react-query.tsx
  * @description React Query provider setup
- * @author Kindy
- * @created 2025-11-16
+ * @author HoangPhuc
+ * @created 03-02-2026
  */
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';

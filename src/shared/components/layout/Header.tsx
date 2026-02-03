@@ -1,8 +1,8 @@
 /**
  * @file Header.tsx
  * @description Header component with search, notifications, and user info
- * @author Kindy
- * @created 2025-11-16
+ * @author HoangPhuc
+ * @created 03-02-2026
  */
 
 import { useCallback } from 'react';
@@ -25,7 +25,7 @@ interface UserInfo {
 }
 
 const mockUser: UserInfo = {
-  name: 'Lê Thị Ngọc Linh',
+  name: 'Thái Bảo Hạo Nhiên',
   role: 'Admin',
   avatar: undefined,
 };

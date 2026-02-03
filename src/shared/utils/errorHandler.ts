@@ -1,8 +1,8 @@
 /**
  * @file errorHandler.ts
  * @description Error handling utilities
- * @author Kindy
- * @created 2025-11-16
+ * @author HoangPhuc
+ * @created 03-02-2026
  */
 
 import axios from 'axios';

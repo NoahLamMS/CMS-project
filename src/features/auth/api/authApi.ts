@@ -1,45 +1,25 @@
 /**
  * @file authApi.ts
- * @description Auth API
- * @author Kindy
- * @created 2025-11-16
+ * @description Auth API for ecommerce-nodejs backend
  */
 
 import { apiClient } from '@/core/api/client';
 import { API_ENDPOINTS } from '@/core/api/endpoints';
-import { LoginCredentials, RegisterData, AuthUser } from '../types/auth.types';
-
-export interface AuthResponse {
-  user: AuthUser;
-  token: string;
-  refreshToken?: string;
-}
+import { LoginCredentials, RegisterData, AuthResponse } from '../types/auth.types';
 
 export const authApi = {
   login: async (credentials: LoginCredentials): Promise<AuthResponse> => {
     const { data } = await apiClient.post<AuthResponse>(
-      API_ENDPOINTS.AUTH.LOGIN,
+      API_ENDPOINTS.AUTH.SIGNIN,
       credentials
     );
     return data;
   },
 
-  register: async (data: RegisterData): Promise<AuthResponse> => {
-    const { data: response } = await apiClient.post<AuthResponse>(
-      API_ENDPOINTS.AUTH.REGISTER,
-      data
-    );
-    return response;
-  },
-
-  logout: async (): Promise<void> => {
-    await apiClient.post(API_ENDPOINTS.AUTH.LOGOUT);
-  },
-
-  refreshToken: async (refreshToken: string): Promise<AuthResponse> => {
+  register: async (registerData: RegisterData): Promise<AuthResponse> => {
     const { data } = await apiClient.post<AuthResponse>(
-      API_ENDPOINTS.AUTH.REFRESH,
-      { refreshToken }
+      API_ENDPOINTS.AUTH.SIGNUP,
+      registerData
     );
     return data;
   },

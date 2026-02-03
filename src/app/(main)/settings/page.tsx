@@ -1,8 +1,8 @@
 /**
  * @file page.tsx
  * @description Settings page
- * @author Kindy
- * @created 2025-11-16
+ * @author HoangPhuc
+ * @created 03-02-2026
  */
 
 import { Card } from '@/shared/components/ui';
@@ -17,8 +17,8 @@ export default function SettingsPage() {
         <Card className="p-6">
           <h2 className="text-lg font-semibold text-gray-800 mb-4">Thông Tin Tài Khoản</h2>
           <div className="space-y-4">
-            <Input label="Tên" defaultValue="Kindy" />
-            <Input label="Email" type="email" defaultValue="kindy@example.com" />
+            <Input label="Tên" defaultValue="HoangPhuc" />
+            <Input label="Email" type="email" defaultValue="HoangPhuc@example.com" />
             <Input label="Số Điện Thoại" defaultValue="0123456789" />
             <Button variant="primary">Lưu Thay Đổi</Button>
           </div>

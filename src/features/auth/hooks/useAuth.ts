@@ -1,8 +1,8 @@
 /**
  * @file useAuth.ts
  * @description useAuth hook
- * @author Kindy
- * @created 2025-11-16
+ * @author HoangPhuc
+ * @created 03-02-2026
  */
 
 import { useAuthStore } from '../store/authStore';

@@ -1,8 +1,8 @@
 /**
  * @file App.tsx
  * @description Root application component
- * @author Kindy
- * @created 2025-11-16
+ * @author HoangPhuc
+ * @created 03-02-2026
  */
 
 import { ConfigProvider } from 'antd';

@@ -1,8 +1,8 @@
 /**
  * @file page.tsx
  * @description Orders page
- * @author Kindy
- * @created 2025-11-16
+ * @author HoangPhuc
+ * @created 03-02-2026
  */
 
 import { Card } from '@/shared/components/ui';
@@ -10,8 +10,8 @@ import { Card } from '@/shared/components/ui';
 export default function OrdersPage() {
   const orders = [
     { id: 'ORD-001', customer: 'Nguyễn Văn A', total: '2,500,000đ', status: 'Đã giao', date: '2025-11-15' },
-    { id: 'ORD-002', customer: 'Trần Thị B', total: '1,800,000đ', status: 'Đang giao', date: '2025-11-16' },
-    { id: 'ORD-003', customer: 'Lê Văn C', total: '3,200,000đ', status: 'Chờ xử lý', date: '2025-11-16' },
+    { id: 'ORD-002', customer: 'Trần Thị B', total: '1,800,000đ', status: 'Đang giao', date: '03-02-2026' },
+    { id: 'ORD-003', customer: 'Lê Văn C', total: '3,200,000đ', status: 'Chờ xử lý', date: '03-02-2026' },
     { id: 'ORD-004', customer: 'Phạm Thị D', total: '950,000đ', status: 'Đã giao', date: '2025-11-14' },
     { id: 'ORD-005', customer: 'Hoàng Văn E', total: '4,500,000đ', status: 'Đang giao', date: '2025-11-15' },
   ];

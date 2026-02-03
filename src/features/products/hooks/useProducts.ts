@@ -1,18 +1,16 @@
 /**
  * @file useProducts.ts
- * @description Custom hook for product management with useState, useEffect, useCallback
- * @author Kindy
- * @created 2025-11-16
+ * @description Custom hook for product management using real API
  */
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { ProductStatus } from '../types/product.types';
+import { useState, useCallback, useMemo } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { productApi } from '../api/productApi';
 import type {
   IProduct,
   IProductFilter,
-  IProductListParams,
-  IPaginatedResponse,
+  CreateProductData,
+  UpdateProductData,
 } from '../types/product.types';
 
 interface UseProductsOptions {
@@ -35,150 +33,9 @@ interface UseProductsReturn {
   filter: IProductFilter;
   setFilter: (filter: IProductFilter) => void;
   setSearch: (search: string) => void;
-  setStatus: (status: ProductStatus | undefined) => void;
   resetFilter: () => void;
   refetch: () => void;
 }
-
-const mockProducts: IProduct[] = [
-  {
-    id: '#12345',
-    name: 'Hộp trứng gà PinkyEgg 6 quả',
-    image: '/images/egg-box-6.png',
-    category: { id: '1', name: 'Hộp 6', slug: 'hop-6', color: '#3B82F6' },
-    price: 25000,
-    stockQuantity: 0,
-    status: ProductStatus.OUT_OF_STOCK,
-    createdAt: '2025-01-01',
-    updatedAt: '2025-01-01',
-  },
-  {
-    id: '#12346',
-    name: 'Giỏ trứng gà PinkyEgg 30 quả',
-    image: '/images/egg-basket-30.png',
-    category: { id: '2', name: 'Hộp 30', slug: 'hop-30', color: '#3B82F6' },
-    price: 125000,
-    stockQuantity: 0,
-    status: ProductStatus.OUT_OF_STOCK,
-    createdAt: '2025-01-01',
-    updatedAt: '2025-01-01',
-  },
-  {
-    id: '#12347',
-    name: 'Pinky Egg Organic hộp 6',
-    image: '/images/egg-organic-6.png',
-    category: { id: '1', name: 'Hộp 6', slug: 'hop-6', color: '#3B82F6' },
-    price: 35000,
-    stockQuantity: 95,
-    status: ProductStatus.IN_STOCK,
-    createdAt: '2025-01-01',
-    updatedAt: '2025-01-01',
-  },
-  {
-    id: '#18050',
-    name: 'Hộp trứng gà PinkyEgg 12 quả',
-    image: '/images/egg-box-12.png',
-    category: { id: '3', name: 'Hộp 12', slug: 'hop-12', color: '#8B5CF6' },
-    price: 45000,
-    stockQuantity: 0,
-    status: ProductStatus.OUT_OF_STOCK,
-    createdAt: '2025-01-01',
-    updatedAt: '2025-01-01',
-  },
-  {
-    id: '#12348',
-    name: 'Khay trứng gà 30 quả',
-    image: '/images/egg-tray-30.png',
-    category: { id: '2', name: 'Hộp 30', slug: 'hop-30', color: '#3B82F6' },
-    price: 95000,
-    stockQuantity: 593,
-    status: ProductStatus.IN_STOCK,
-    createdAt: '2025-01-01',
-    updatedAt: '2025-01-01',
-  },
-  {
-    id: '#12349',
-    name: 'Hộp trứng gà PinkyEgg 6 quả',
-    image: '/images/egg-box-6.png',
-    category: { id: '1', name: 'Hộp 6', slug: 'hop-6', color: '#3B82F6' },
-    price: 25000,
-    stockQuantity: 0,
-    status: ProductStatus.OUT_OF_STOCK,
-    createdAt: '2025-01-01',
-    updatedAt: '2025-01-01',
-  },
-  {
-    id: '#12350',
-    name: 'Giỏ trứng gà PinkyEgg 30 quả',
-    image: '/images/egg-basket-30.png',
-    category: { id: '2', name: 'Hộp 30', slug: 'hop-30', color: '#3B82F6' },
-    price: 125000,
-    stockQuantity: 0,
-    status: ProductStatus.OUT_OF_STOCK,
-    createdAt: '2025-01-01',
-    updatedAt: '2025-01-01',
-  },
-  {
-    id: '#12351',
-    name: 'Pinky Egg Organic hộp 6',
-    image: '/images/egg-organic-6.png',
-    category: { id: '1', name: 'Hộp 6', slug: 'hop-6', color: '#3B82F6' },
-    price: 35000,
-    stockQuantity: 95,
-    status: ProductStatus.IN_STOCK,
-    createdAt: '2025-01-01',
-    updatedAt: '2025-01-01',
-  },
-  {
-    id: '#18051',
-    name: 'Hộp trứng gà PinkyEgg 12 quả',
-    image: '/images/egg-box-12.png',
-    category: { id: '3', name: 'Hộp 12', slug: 'hop-12', color: '#8B5CF6' },
-    price: 45000,
-    stockQuantity: 0,
-    status: ProductStatus.OUT_OF_STOCK,
-    createdAt: '2025-01-01',
-    updatedAt: '2025-01-01',
-  },
-  {
-    id: '#12352',
-    name: 'Khay trứng gà 30 quả',
-    image: '/images/egg-tray-30.png',
-    category: { id: '2', name: 'Hộp 30', slug: 'hop-30', color: '#3B82F6' },
-    price: 95000,
-    stockQuantity: 593,
-    status: ProductStatus.IN_STOCK,
-    createdAt: '2025-01-01',
-    updatedAt: '2025-01-01',
-  },
-];
-
-const fetchProducts = async (params: IProductListParams): Promise<IPaginatedResponse<IProduct>> => {
-  await new Promise(resolve => setTimeout(resolve, 500));
-
-  let filtered = [...mockProducts];
-
-  if (params.filter?.search) {
-    const search = params.filter.search.toLowerCase();
-    filtered = filtered.filter(p => p.name.toLowerCase().includes(search));
-  }
-
-  if (params.filter?.status) {
-    filtered = filtered.filter(p => p.status === params.filter?.status);
-  }
-
-  const total = filtered.length;
-  const start = (params.page - 1) * params.pageSize;
-  const data = filtered.slice(start, start + params.pageSize);
-
-  return {
-    data,
-    total,
-    page: params.page,
-    pageSize: params.pageSize,
-    totalPages: Math.ceil(total / params.pageSize),
-  };
-};
 
 const DEFAULT_FILTER: IProductFilter = {};
 const DEFAULT_PAGE = 1;
@@ -195,34 +52,45 @@ export function useProducts(options: UseProductsOptions = {}): UseProductsReturn
   const [pageSize, setPageSize] = useState(initialPageSize);
   const [filter, setFilter] = useState<IProductFilter>(initialFilter);
 
-  const queryParams = useMemo<IProductListParams>(() => ({
-    page,
-    pageSize,
-    filter,
-  }), [page, pageSize, filter]);
-
   const {
-    data,
+    data: products = [],
     isLoading,
     isFetching,
     error,
     refetch,
   } = useQuery({
-    queryKey: ['products', queryParams],
-    queryFn: () => fetchProducts(queryParams),
+    queryKey: ['products', filter],
+    queryFn: () => productApi.getProducts(),
     staleTime: 5 * 60 * 1000,
   });
 
-  useEffect(() => {
-    setPage(1);
-  }, [filter]);
+  // Client-side filtering and pagination
+  const filteredProducts = useMemo(() => {
+    let result = [...products];
+
+    if (filter.search) {
+      const search = filter.search.toLowerCase();
+      result = result.filter(p => p.name.toLowerCase().includes(search));
+    }
+
+    if (filter.minPrice !== undefined) {
+      result = result.filter(p => p.price >= filter.minPrice!);
+    }
+
+    if (filter.maxPrice !== undefined) {
+      result = result.filter(p => p.price <= filter.maxPrice!);
+    }
+
+    return result;
+  }, [products, filter]);
+
+  const total = filteredProducts.length;
+  const totalPages = Math.ceil(total / pageSize);
+  const paginatedProducts = filteredProducts.slice((page - 1) * pageSize, page * pageSize);
 
   const setSearch = useCallback((search: string) => {
     setFilter(prev => ({ ...prev, search: search || undefined }));
-  }, []);
-
-  const setStatus = useCallback((status: ProductStatus | undefined) => {
-    setFilter(prev => ({ ...prev, status }));
+    setPage(1);
   }, []);
 
   const resetFilter = useCallback(() => {
@@ -231,9 +99,9 @@ export function useProducts(options: UseProductsOptions = {}): UseProductsReturn
   }, []);
 
   return {
-    products: data?.data ?? [],
-    total: data?.total ?? 0,
-    totalPages: data?.totalPages ?? 0,
+    products: paginatedProducts,
+    total,
+    totalPages,
     isLoading,
     isFetching,
     error: error as Error | null,
@@ -244,7 +112,6 @@ export function useProducts(options: UseProductsOptions = {}): UseProductsReturn
     filter,
     setFilter,
     setSearch,
-    setStatus,
     resetFilter,
     refetch,
   };
@@ -253,10 +120,41 @@ export function useProducts(options: UseProductsOptions = {}): UseProductsReturn
 export function useProductDetail(productId: string) {
   return useQuery({
     queryKey: ['product', productId],
-    queryFn: async () => {
-      await new Promise(resolve => setTimeout(resolve, 300));
-      return mockProducts.find(p => p.id === productId) ?? null;
-    },
+    queryFn: () => productApi.getProductById(productId),
     enabled: !!productId,
+  });
+}
+
+export function useCreateProduct() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: CreateProductData) => productApi.createProduct(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['products'] });
+    },
+  });
+}
+
+export function useUpdateProduct() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: UpdateProductData }) =>
+      productApi.updateProduct(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['products'] });
+    },
+  });
+}
+
+export function useDeleteProduct() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => productApi.deleteProduct(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['products'] });
+    },
   });
 }
