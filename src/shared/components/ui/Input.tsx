@@ -6,7 +6,7 @@
  */
 
 import { InputHTMLAttributes } from 'react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/utils/format';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;

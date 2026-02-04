@@ -3,8 +3,8 @@
  * @description Product API for ecommerce-nodejs backend
  */
 
-import { apiClient } from '@/core/api/client';
-import { API_ENDPOINTS } from '@/core/api/endpoints';
+import { apiClient } from '@/services/axios.instance';
+import { API_ENDPOINTS } from '@/constants/api-routes';
 import { IProduct, CreateProductData, UpdateProductData } from '../types/product.types';
 
 export const productApi = {

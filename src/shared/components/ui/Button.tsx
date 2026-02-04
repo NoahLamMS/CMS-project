@@ -6,7 +6,7 @@
  */
 
 import { ButtonHTMLAttributes, ReactNode } from 'react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/utils/format';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'outline';

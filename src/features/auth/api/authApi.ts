@@ -3,8 +3,8 @@
  * @description Auth API for ecommerce-nodejs backend
  */
 
-import { apiClient } from '@/core/api/client';
-import { API_ENDPOINTS } from '@/core/api/endpoints';
+import { apiClient } from '@/services/axios.instance';
+import { API_ENDPOINTS } from '@/constants/api-routes';
 import { LoginCredentials, RegisterData, AuthResponse } from '../types/auth.types';
 
 export const authApi = {

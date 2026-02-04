@@ -113,6 +113,7 @@ export function ProductModal({ open, product, onClose, onSuccess }: ProductModal
                     <InputNumber
                         placeholder="Nhập giá"
                         className="w-full"
+                        style={{ width: '100%' }}
                         formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                         parser={(value) => value?.replace(/,/g, '') as unknown as number}
                     />
