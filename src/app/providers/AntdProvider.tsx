@@ -11,15 +11,15 @@ import { ReactNode } from 'react';
 
 const theme = {
     token: {
-        colorPrimary: '#F97316',
+        colorPrimary: '#0ba1ddc4',
         borderRadius: 8,
         fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
     },
     components: {
         Menu: {
-            itemSelectedBg: '#FFF7ED',
-            itemSelectedColor: '#EA580C',
-            itemHoverBg: '#FFF7ED',
+            itemSelectedBg: '#cbfcffff',
+            // itemSelectedColor: '#000000',
+            itemHoverBg: '#cbfcffff',
         },
         Button: {
             primaryShadow: 'none',

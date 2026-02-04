@@ -179,46 +179,48 @@ export function ProductsPage({ className }: ProductsPageProps) {
             width: 60,
             fixed: 'right',
             render: (_: unknown, record: IProduct) => (
-                <Dropdown
-                    menu={{
-                        items: [
-                            {
-                                key: 'view',
-                                icon: <EyeOutlined />,
-                                label: 'Xem chi tiết',
-                                onClick: () => handleView(record),
-                            },
-                            {
-                                key: 'edit',
-                                icon: <EditOutlined />,
-                                label: 'Chỉnh sửa',
-                                onClick: () => handleEdit(record),
-                            },
-                            { type: 'divider' },
-                            {
-                                key: 'delete',
-                                icon: <DeleteOutlined />,
-                                danger: true,
-                                label: (
-                                    <Popconfirm
-                                        title="Xác nhận xóa?"
-                                        description={`Bạn có chắc muốn xóa "${record.name}"?`}
-                                        onConfirm={() => handleDelete(record)}
-                                        okText="Xóa"
-                                        cancelText="Hủy"
-                                        okButtonProps={{ danger: true }}
-                                    >
-                                        <span className="text-red-500">Xóa sản phẩm</span>
-                                    </Popconfirm>
-                                ),
-                            },
-                        ],
-                    }}
-                    trigger={['click']}
-                    placement="bottomRight"
-                >
-                    <Button type="text" icon={<MoreOutlined />} />
-                </Dropdown>
+                <div onClick={(e) => e.stopPropagation()}>
+                    <Dropdown
+                        menu={{
+                            items: [
+                                {
+                                    key: 'view',
+                                    icon: <EyeOutlined />,
+                                    label: 'Xem chi tiết',
+                                    onClick: () => handleView(record),
+                                },
+                                {
+                                    key: 'edit',
+                                    icon: <EditOutlined />,
+                                    label: 'Chỉnh sửa',
+                                    onClick: () => handleEdit(record),
+                                },
+                                { type: 'divider' },
+                                {
+                                    key: 'delete',
+                                    icon: <DeleteOutlined />,
+                                    danger: true,
+                                    label: (
+                                        <Popconfirm
+                                            title="Xác nhận xóa?"
+                                            description={`Bạn có chắc muốn xóa "${record.name}"?`}
+                                            onConfirm={() => handleDelete(record)}
+                                            okText="Xóa"
+                                            cancelText="Hủy"
+                                            okButtonProps={{ danger: true }}
+                                        >
+                                            <span className="text-red-500">Xóa sản phẩm</span>
+                                        </Popconfirm>
+                                    ),
+                                },
+                            ],
+                        }}
+                        trigger={['click']}
+                        placement="bottomRight"
+                    >
+                        <Button type="text" icon={<MoreOutlined />} />
+                    </Dropdown>
+                </div>
             ),
         },
     ], [handleView, handleEdit, handleDelete]);
@@ -234,18 +236,10 @@ export function ProductsPage({ className }: ProductsPageProps) {
                         Tổng cộng {total} sản phẩm
                     </Text>
                 </div>
-                <Button
-                    type="primary"
-                    icon={<PlusOutlined />}
-                    onClick={handleAddProduct}
-                    size="large"
-                    className="bg-orange-500 hover:bg-orange-600"
-                >
-                    Thêm sản phẩm
-                </Button>
             </Flex>
 
-            <Card className="shadow-sm rounded-xl">
+            <Card className="shadow-sm rounded-xl p-4">
+                <div className='p-4'>
                 <Flex justify="space-between" align="center" className="mb-4">
                     <Space>
                         <Input
@@ -258,19 +252,28 @@ export function ProductsPage({ className }: ProductsPageProps) {
                         />
                     </Space>
 
-                    <Button
-                        icon={<ReloadOutlined spin={isFetching} />}
-                        onClick={() => refetch()}
-                    >
-                        Làm mới
-                    </Button>
+                    <Flex>
+                        <Button
+                            type="primary"
+                            icon={<PlusOutlined />}
+                            onClick={handleAddProduct}
+                            size="large"
+                            className="bg-orange-500 hover:bg-orange-600"
+                        >
+                            Thêm sản phẩm
+                        </Button>
+                    </Flex>
                 </Flex>
-
+                </div>
                 <Table<IProduct>
                     columns={columns}
                     dataSource={products}
                     rowKey="_id"
                     loading={isLoading}
+                    onRow={(record) => ({
+                        onClick: () => handleView(record),
+                    })}
+                    style={{ cursor: 'pointer' }}
                     pagination={{
                         current: page,
                         pageSize: pageSize,

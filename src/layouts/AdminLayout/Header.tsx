@@ -96,7 +96,7 @@ export function Header({ title }: HeaderProps) {
                             icon={!mockUser.avatar && <UserOutlined />}
                             className="bg-orange-500"
                         />
-                        <div className="hidden md:block">
+                        <div className="hidden md:flex flex-col justify-center">
                             <Text strong className="block text-sm leading-tight">
                                 {mockUser.name}
                             </Text>

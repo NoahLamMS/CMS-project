@@ -150,7 +150,7 @@ src/
 | File | Chức năng | Khi nào sửa | Ví dụ code |
 |------|-----------|-------------|------------|
 | `QueryProvider.tsx` | Cấu hình TanStack Query:<br>- `staleTime`: Thời gian cache<br>- `retry`: Số lần retry khi lỗi<br>- `refetchOnWindowFocus`: Tự động refetch khi focus window | • Đổi thời gian cache<br>• Đổi số lần retry<br>• Thêm config khác | `staleTime: 5 * 60 * 1000` |
-| `AntdProvider.tsx` | Cấu hình theme Ant Design:<br>- `colorPrimary`: Màu chủ đạo<br>- `borderRadius`: Bo góc<br>- `fontFamily`: Font chữ<br>- Locale (vi/en) | • Đổi màu chủ đạo<br>• Đổi font chữ<br>• Custom component styles | `colorPrimary: '#F97316'` |
+| `AntdProvider.tsx` | Cấu hình theme Ant Design:<br>- `colorPrimary`: Màu chủ đạo<br>- `borderRadius`: Bo góc<br>- `fontFamily`: Font chữ<br>- Locale (vi/en) | • Đổi màu chủ đạo<br>• Đổi font chữ<br>• Custom component styles | `colorPrimary: '#0ba1ddc4'` |
 
 #### **Các files trong `app/router/`**
 
@@ -333,7 +333,7 @@ apiClient.get(API_ENDPOINTS.PRODUCTS.LIST);
 **Ví dụ CSS variables**:
 ```css
 :root {
-  --color-primary: #F97316;
+  --color-primary: #0ba1ddc4;
   --color-primary-hover: #EA580C;
   --color-background: #F9FAFB;
 }
@@ -414,7 +414,7 @@ shared/
 
 1. **Đổi màu Ant Design** → Sửa `src/app/providers/AntdProvider.tsx`:
    ```typescript
-   colorPrimary: '#1677ff' // Đổi từ #F97316
+   colorPrimary: '#1677ff' // Đổi từ #0ba1ddc4
    ```
 
 2. **Đổi CSS variables** → Sửa `src/styles/globals.css`:

@@ -43,11 +43,11 @@ export function ProductDetailModal({ open, productId, onClose }: ProductDetailMo
                         <Image
                             src={product.image || 'https://via.placeholder.com/300?text=No+Image'}
                             alt={product.name}
-                            className="rounded-lg shadow-md w-full object-cover"
+                            className="rounded-lg w-full"
                             fallback="https://via.placeholder.com/300?text=Error"
                         />
                     </div>
-                    <div className="space-y-4">
+                    <div className="space-y-2 px-2">
                         <div>
                             <Text type="secondary" className="block text-xs uppercase tracking-wide">ID: {product._id}</Text>
                             <Title level={3} className="!mt-0 !mb-1">{product.name}</Title>
@@ -67,7 +67,7 @@ export function ProductDetailModal({ open, productId, onClose }: ProductDetailMo
 
                         <div>
                             <Text strong className="block mb-1">Mô tả:</Text>
-                            <Paragraph className="text-gray-600 bg-gray-50 p-3 rounded-md">
+                            <Paragraph className="text-gray-600 bg-gray-50 rounded-md">
                                 {product.description || 'Chưa có mô tả chi tiết cho sản phẩm này.'}
                             </Paragraph>
                         </div>

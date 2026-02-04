@@ -97,12 +97,12 @@ export function Sidebar({ collapsed = false, onCollapse }: SidebarProps) {
             theme="light"
         >
             <div className="flex items-center gap-3 p-4 border-b border-gray-100">
-                <div className="w-10 h-10 rounded-lg bg-orange-500 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-lg bg-blue-500 flex items-center justify-center">
                     <span className="text-white font-bold text-lg">M</span>
                 </div>
                 {!isCollapsed && (
                     <div>
-                        <Text strong className="text-orange-600 text-lg block leading-tight">
+                        <Text strong className="text-blue-600 text-lg block leading-tight">
                             CMS project
                         </Text>
                     </div>
