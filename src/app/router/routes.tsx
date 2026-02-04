@@ -3,6 +3,7 @@ import PrivateRoute from "./PrivateRoute";
 import LoginPage from "../../features/auth/pages/LoginPage";
 import MainLayout from "../../layouts/MainLayout";
 import DashboardPage from "../../features/dashboard/pages/DashboardPage";
+import ProductsPage from "../../features/products/pages/ProductsPage";
 
 export const routes = [
   {
@@ -26,6 +27,10 @@ export const routes = [
       {
         path: "dashboard",
         element: <DashboardPage />,
+      },
+      {
+        path: "products",
+        element: <ProductsPage />,
       },
     ],
   },
