@@ -1,119 +1,88 @@
-/**
- * @file LoginPage.tsx
- * @description Login page connected to backend /api/signin
- */
-
-import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { Form, Input, Button, Card, Typography, message, Divider } from 'antd';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { useAuthStore } from '../store/authStore';
-
-const { Title, Text } = Typography;
+import { useNavigate } from 'react-router-dom';
+import { Button, Checkbox, Form, Input, Card } from 'antd';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { useAuthStore } from '../../../stores/auth.store';
+import { appImages } from '../../../constants/app-info';
 
 interface LoginFormValues {
-    email: string;
-    password: string;
+  email: string;
+  password: string;
+  remember: boolean;
 }
 
-export function LoginPage() {
+const LoginPage = () => {
     const navigate = useNavigate();
-    const { login, loading } = useAuthStore();
-    const [form] = Form.useForm();
+    const login = useAuthStore((s) => s.login);
 
-    const handleSubmit = async (values: LoginFormValues) => {
-        try {
-            await login(values);
-            message.success('Đăng nhập thành công!');
-            navigate('/dashboard');
-        } catch (error) {
-            if (error instanceof Error) {
-                message.error(error.message || 'Đăng nhập thất bại!');
-            } else {
-                message.error('Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.');
-            }
-        }
+    const onFinish = (_values: LoginFormValues) => {
+        login();
+        navigate('/dashboard');
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 to-orange-100">
+        <div className="min-h-screen flex items-center justify-center bg-gray-100">
             <Card
-                className="w-full max-w-md shadow-2xl rounded-2xl border-0"
-                styles={{ body: { padding: '40px' } }}
+                className="w-[460px] px-2 py-4 shadow-xl"
+                bordered={false}
             >
-                <div className="text-center mb-8">
-                    <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-orange-600 rounded-2xl mx-auto mb-4 flex items-center justify-center">
-                        <span className="text-3xl">🛒</span>
-                    </div>
-                    <Title level={2} className="!mb-2 !text-gray-800">
-                        Đăng nhập
-                    </Title>
-                    <Text className="text-gray-500">
-                        Chào mừng bạn quay trở lại!
-                    </Text>
+                <div className="mb-8 flex items-center justify-center">
+                    <img src={appImages.logo} alt="img"/>
                 </div>
 
                 <Form
-                    form={form}
                     layout="vertical"
-                    onFinish={handleSubmit}
-                    autoComplete="off"
-                    size="large"
+                    className="space-y-1"
+                    initialValues={{
+                        email: 'admin@gmail.com',
+                        password: 'zaQ@1234',
+                        remember: true,
+                    }}
+                    onFinish={onFinish}
                 >
-                    <Form.Item
-                        name="email"
-                        rules={[
-                            { required: true, message: 'Vui lòng nhập email!' },
-                            { type: 'email', message: 'Email không hợp lệ!' },
-                        ]}
-                    >
-                        <Input
-                            prefix={<UserOutlined className="text-gray-400" />}
-                            placeholder="Email"
-                            className="rounded-lg"
-                        />
+                    <Form.Item name="email">
+                    <Input
+                        size="large"
+                        className="h-12"
+                        prefix={<UserOutlined />}
+                        placeholder="Email"
+                    />
                     </Form.Item>
 
-                    <Form.Item
-                        name="password"
-                        rules={[
-                            { required: true, message: 'Vui lòng nhập mật khẩu!' },
-                            { min: 6, message: 'Mật khẩu phải có ít nhất 6 ký tự!' },
-                        ]}
-                    >
+                    <Form.Item name="password">
                         <Input.Password
-                            prefix={<LockOutlined className="text-gray-400" />}
-                            placeholder="Mật khẩu"
-                            className="rounded-lg"
+                            size="large"
+                            className="h-12"
+                            prefix={<LockOutlined />}
+                            placeholder="Password"
                         />
                     </Form.Item>
 
-                    <Form.Item className="mb-2">
+                    <div className="flex items-center justify-between mb-6">
+                        <Form.Item name="remember" valuePropName="checked" noStyle>
+                            <Checkbox>Remember me</Checkbox>
+                        </Form.Item>
+                        <a className="!text-orange-500 text-sm">Forgot password?</a>
+                    </div>
+
+                    <Form.Item>
                         <Button
                             type="primary"
                             htmlType="submit"
+                            size="large"
+                            className="h-12 !bg-orange-500 text-base"
                             block
-                            loading={loading}
-                            className="h-12 rounded-lg bg-orange-500 hover:bg-orange-600 text-base font-medium"
                         >
-                            {loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
+                            Log in
                         </Button>
                     </Form.Item>
                 </Form>
-
-                <Divider className="!text-gray-400">hoặc</Divider>
-
-                <div className="text-center">
-                    <Text className="text-gray-500">
-                        Chưa có tài khoản?{' '}
-                        <Link to="/register" className="text-orange-500 hover:text-orange-600 font-medium">
-                            Đăng ký ngay
-                        </Link>
-                    </Text>
+                <div className="text-center text-sm text-gray-500 mt-4">
+                    Don&apos;t have an account?{' '}
+                    <a className="!text-orange-500">Register now</a>
                 </div>
             </Card>
         </div>
     );
-}
+};
 
 export default LoginPage;
