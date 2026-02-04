@@ -1,115 +1,80 @@
-# CMS Project - Hệ thống quản lý bán hàng (Fullstack)
+# MebiFarm CMS – Frontend
+---
 
-Hệ thống CMS quản lý bán hàng````````` toàn diện với Frontend React/Vite và Backend Node.js/Express.
+## Tech Stack
 
-## 🚀 Tech Stack
+- **React 18 + TypeScript**
+- **Vite**
+- **Ant Design v5**
+- **Tailwind CSS v4**
+- **React Router v6 (Browser Router)**
+- **TanStack Query** – server state
+- **Zustand** – client / UI state
+- **Axios** – HTTP client
 
-### Frontend
-- **Framework**: React 18, Vite 6.0
-- **Language**: TypeScript
-- **UI Libraries**: Ant Design 5, Tailwind CSS v4
-- **State Management**: Zustand (Client), TanStack Query (Server)
-- **Routing**: React Router v6
-- **HTTP Client**: Axios
+---
 
-### Backend (`ecommerce-nodejs`)
-- **Runtime**: Node.js
-- **Framework**: Express.js
-- **Database**: MongoDB + Mongoose
-- **Authentication**: JWT (JSON Web Tokens)
-- **Security**: bcryptjs, cors
+## setup & run project & architecture
 
-## 📁 Project Structure
+```bash
+npm install
+npm run dev
 
-```
-CMS-project/
-├── ecommerce-nodejs/     # Backend Server
-│   ├── src/
-│   │   ├── config/       # DB Connection
-│   │   ├── controllers/  # Route Logic
-│   │   ├── middleware/   # Auth Middleware
-│   │   ├── model/        # Mongoose Models
-│   │   └── routers/      # API Routes
-│   └── package.json
+src/
+├── app/                         # App shell (bootstrap)
+│   ├── providers/               # Global providers
+│   │   ├── QueryProvider.tsx    # TanStack Query
+│   │   └── AntdProvider.tsx     # Ant Design theme
+│   │
+│   ├── router/                  # Routing system
+│   │   ├── index.tsx            # useRoutes
+│   │   ├── routes.tsx           # route config
+│   │   └── PrivateRoute.tsx     # auth guard
+│   │
+│   └── App.tsx                  # Root App (render router only)
 │
-├── src/                  # Frontend Client
-│   ├── features/         # Feature Modules
-│   │   ├── auth/         # Login, Register pages & logic
-│   │   ├── products/     # Product CRUD & UI
-│   │   └── ...
-│   ├── core/             # API Config & Envs
-│   ├── shared/           # Common components
-│   └── App.tsx
-└── README.md
-```
+├── layouts/                     # Layouts
+│   ├── AdminLayout/             # Sidebar + Header (dashboard)
+│   └── AuthLayout/              # Login layout
+│
+├── features/                    # Domain-based modules
+│   ├── auth/
+│   │   ├── pages/
+│   │   │   └── LoginPage.tsx
+│   │   ├── api/
+│   │   │   └── auth.api.ts
+│   │   └── store/
+│   │       └── auth.store.ts
+│   │
+│   ├── dashboard/
+│   │   └── pages/
+│   │       └── DashboardPage.tsx
+│   │
+│   └── users/                   # Example feature
+│       ├── pages/
+│       ├── components/
+│       ├── api/
+│       └── hooks/
+│
+├── services/                    # Infrastructure layer
+│   ├── axios.instance.ts        # Axios config
+│   ├── handleApi.ts             # callApi wrapper
+│   └── types.ts
+│
+├── stores/                      # Global Zustand store
+│   └── ui.store.ts              # UI state (sidebar, theme…)
+│
+├── constants/                   # Constants & configs
+│   ├── env.ts                   # Environment variables
+│   ├── routes.ts
+│   └── api-routes.ts
+│
+├── styles/
+│   └── globals.css              # Global CSS (optional)
+│
+├── utils/                       # Helpers
+│   └── format.ts
+│
+├── index.css                    # Tailwind entry
+├── main.tsx                     # App bootstrap
 
-## ✅ Implemented Features
-
-### 🔐 Authentication
-- **Đăng ký (Register)**: Tạo tài khoản mới, validate dữ liệu.
-- **Đăng nhập (Login)**: Xác thực, nhận JWT token, lưu trữ vào localStorage.
-- **Protected Routes**: Chuyển hướng nếu chưa đăng nhập.
-
-### 📦 Products Management (Full CRUD)
-- **Danh sách**: Hiển thị sản phẩm từ Database, phân trang server-side.
-- **Xem chi tiết**: Modal hiển thị thông tin đầy đủ.
-- **Thêm mới**: Form tạo sản phẩm mới.
-- **Chỉnh sửa**: Cập nhật thông tin sản phẩm.
-- **Xóa**: Xóa mềm/cứng sản phẩm có xác nhận.
-- **Tìm kiếm**: Tìm kiếm theo tên sản phẩm realtime.
-
-### 👥 Collaborators Management
-- Quản lý danh sách cộng tác viên (UI-only currently).
-
-## 🛠️ Getting Started
-
-### Prerequisites
-- Node.js >= 18
-- MongoDB (đang chạy tại `mongodb://localhost:27017`)
-
-### 1. Start Backend
-
-```bash
-cd ecommerce-nodejs
-npm install
-npm run dev
-```
-Backend sẽ chạy tại `http://localhost:3000`
-
-### 2. Start Frontend
-
-Mở terminal mới:
-```bash
-# Tại thư mục gốc CMS-project
-npm install
-npm run dev
-```
-Frontend sẽ chạy tại `http://localhost:6868`
-
-## 🔌 API Endpoints
-
-| Method | Endpoint | Description | Auth |
-|--------|----------|-------------|------|
-| POST | `/api/signup` | Đăng ký tài khoản | Public |
-| POST | `/api/signin` | Đăng nhập lấy Token | Public |
-| GET | `/api/products` | Lấy danh sách sản phẩm | Public |
-| GET | `/api/products/:id` | Lấy chi tiết sản phẩm | Public |
-| POST | `/api/products` | Tạo sản phẩm mới | Admin |
-| PUT | `/api/products/:id` | Cập nhật sản phẩm | Admin |
-| DELETE | `/api/products/:id` | Xóa sản phẩm | Admin |
-
-## 📖 Routes
-
-| Path | Page |
-|------|------|
-| `/login` | Trang Đăng nhập |
-| `/register` | Trang Đăng ký |
-| `/dashboard` | Tổng quan hệ thống |
-| `/products` | Quản lý sản phẩm |
-| `/collaborators` | Quản lý cộng tác viên |
-
-## 👤 Author
-
-**HoangPhuc**
-- Created: 03-02-2026
-- Last Updated: 03-02-2026
