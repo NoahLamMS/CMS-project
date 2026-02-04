@@ -17,7 +17,7 @@ const MainLayout = () => {
             <Content
                 style={{
                     padding: 24,
-                    background: "#FFF8F5",
+                    background: "#e6f4ff",
                     overflow: "auto",
                 }}
             >
