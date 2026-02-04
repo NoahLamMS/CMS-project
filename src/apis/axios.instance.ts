@@ -11,7 +11,6 @@ const axiosClient = axios.create({
 
 axiosClient.interceptors.request.use(async (config: any) => {
   const access_token = '';
-  const refresh_token = '';
   config.headers = {
     Accept: "application/json",
     "Content-Type": "application/json",
@@ -37,15 +36,15 @@ axiosClient.interceptors.response.use(
     const { response } = error;
 
     if (response?.status === 401) {
-        
-        /**
-         * @update
-         * re-direct login
-         * handle refresh token
-         */
-        window.location.href = '/login';
 
-        return Promise.reject(response.data);
+      /**
+       * @update
+       * re-direct login
+       * handle refresh token
+       */
+      window.location.href = '/login';
+
+      return Promise.reject(response.data);
     }
     return Promise.reject(response?.data || error);
   }
